@@ -1,6 +1,7 @@
 import { Container, Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/navbar';
+import RoomList from '../components/roomsList';
 
 function Home() {
     return <>
@@ -8,9 +9,11 @@ function Home() {
         <Container >
             <Row className='justify-content-md-center' style={{marginTop: '50px'}}>Chat App</Row>
             <Row className='justify-content-md-center'>
-                Welcome
+            < RoomList />
             </Row>
         </Container>
+
+
     
     </>
 }

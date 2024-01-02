@@ -16,7 +16,6 @@ async function logout() {
     }
 }
     
-
 function Navbar() {
     return ( 
         <>

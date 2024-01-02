@@ -1,10 +1,10 @@
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import SignIn from './pages/sign-in';
-import SingUp from './pages/sign-up';
+import SignIn from './pages/signIn';
+import SingUp from './pages/signUp';
 import Home from './pages/home';
-import ErrorPage from './pages/error-page';
-
+import ErrorPage from './pages/errorPage';
+import ChatRoom from './pages/chatRoom';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: !localStorage.getItem('user') ? <SingUp /> : <Home />
+  },
+  {
+    path: '/chatroom/:id',
+    element: localStorage.getItem('user') ? <ChatRoom /> : <SignIn />
   }
 
 ]);
@@ -26,9 +30,9 @@ const router = createBrowserRouter([
 
 
 function App() {
-  return (
+  return <>
     <RouterProvider router={router} />
-  )
+  </>
 }
 
 export default App;

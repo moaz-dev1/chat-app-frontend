@@ -9,7 +9,7 @@ function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    return (
+    return <>
         <div className='SignIn'>
             <input placeholder='Email' onChange={(e) => {
                 setEmail(e.target.value);
@@ -32,7 +32,7 @@ function SignIn() {
                 }
             }}>Sign In</Button>
         </div>
-    )
+    </>
 }
 
 export default SignIn;

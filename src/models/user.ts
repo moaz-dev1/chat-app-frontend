@@ -1,8 +1,17 @@
-export default interface User {
+export interface User {
     id?: number;
     firstName: string;
     lastName: string;
     password: string;
     email: string;
-    createdDate: Date;
+    createdTime: Date;
+}
+
+export interface UserFromDB {
+    id: number;
+    first_name: string;
+    last_name: string;
+    password: string;
+    email: string;
+    created_time: Date;
 }
