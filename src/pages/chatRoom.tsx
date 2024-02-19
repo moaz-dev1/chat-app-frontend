@@ -6,9 +6,9 @@ import { API, SOCKET_SERVER } from "../environment";
 import { decodeToken } from "react-jwt";
 import { User, UserFromDB } from "../models/user";
 import MessagesList from "./messagesList";
-import { Button } from "react-bootstrap";
 import { Socket, io } from "socket.io-client";
 import { Message } from "../models/message";
+import { Button } from "@mui/material";
 
 function ChatRoom() {
     const token = localStorage.getItem('user') as string;

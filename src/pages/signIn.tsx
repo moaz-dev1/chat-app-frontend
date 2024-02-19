@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Button, Container, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { API } from "../environment";
 import { useState } from "react";
+import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 
 function SignIn() {
     const navigate = useNavigate();
@@ -33,30 +33,60 @@ function SignIn() {
         }
     }
 
-    return <>
+    return (
         <div className='SignIn'>
-            <Container style={{margin: '50px auto', width: '50%'}}>
-                <h1 style={{textAlign: 'center', color: '#0069D9'}}>Sign-In</h1>
-                <br />
-                <Form>
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" placeholder="Enter your email" onChange={(e) => {
-                        setEmail(e.target.value);
-                    }}></Form.Control>
-                    <br />
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Enter your password" onChange={(e) => {
-                        setPassword(e.target.value);
-                    }}></Form.Control>
-                    <br />
-                    <Button type="submit" onClick={handleSignIn}>Sign In</Button>
-                    <br />
-                    <span><Link to={'/signup'}>Create an account?</Link></span>
-                </Form> 
-            </Container>
+            <Grid container  width={'70%'} style={{ margin: '50px auto' }} direction="column" alignItems="center" spacing={2}>
+                <Typography variant="h2" style={{ color: '#0069D9'}}>Sign-In</Typography>
+                <Grid item width={'70%'}>
+                    <TextField
+                        label="Email"
+                        type="email"
+                        variant="outlined"
+                        fullWidth
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                    />
+                </Grid>
+                <Grid item width={'70%'}>
+                    <TextField
+                        label="Password"
+                        type="password"
+                        variant="outlined"
+                        fullWidth
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter your password"
+                    />
+                </Grid>
+                <Grid item>
+                    <Button fullWidth variant="contained" color="primary" onClick={handleSignIn}>
+                        Sign In
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <span><Link to={'/signup'} style={{ textDecoration: 'none', color: '#0069D9' }}>Create an account?</Link></span>
+                </Grid>
+            </Grid>
         </div>
-    </>
+    )
 }
 
 export default SignIn;
 
+
+// <form>
+//     <Form.Label>Email</Form.Label>
+//     <Form.Control type="email" placeholder="Enter your email" onChange={(e) => {
+//         setEmail(e.target.value);
+//     }}></Form.Control>
+//     <br />
+//     <Form.Label>Password</Form.Label>
+//     <Form.Control type="password" placeholder="Enter your password" onChange={(e) => {
+//         setPassword(e.target.value);
+//     }}></Form.Control>
+//     <br />
+//     <Button type="submit" onClick={handleSignIn}>Sign In</Button>
+//     <br />
+//     <span><Link to={'/signup'}>Create an account?</Link></span>
+// </Form>

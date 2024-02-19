@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { User } from "../models/user";
 import axios from "axios";
 import { API } from "../environment";
+import { Container, Typography, Grid, TextField, Button } from "@mui/material";
 
 function SingUp() {
     const [firstName, setFirstName] = useState('');
@@ -36,40 +36,65 @@ function SingUp() {
     }
 
     return ( <div className='SignUp'>
-        <Container style={{margin: '50px auto', width: '50%'}}>
-                <h1 style={{textAlign: 'center', color: '#0069D9', marginBottom: '10%'}}>Sign-Up</h1>
-                
-                <Form>
-                    <Row>
-                        <Col>
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control required type="text" placeholder="Enter your first name" onChange={(e) => {
-                                setFirstName(e.target.value);
-                            }}></Form.Control>
-                        </Col>
-                        <Col>
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control required type="text" placeholder="Enter your Last name" onChange={(e) => {
-                                setLastName(e.target.value);
-                            }}></Form.Control>
-                        </Col>
-                    </Row>
-                    <br />
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control required type="email" placeholder="Enter your email" onChange={(e) => {
-                        setEmail(e.target.value);
-                    }}></Form.Control>
-                    <br />
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control required type="password" placeholder="Enter your password" onChange={(e) => {
-                        setPassword(e.target.value);
-                    }}></Form.Control>
-                    <br />
-                    <Button type="submit" onClick={handleSignUp}>Create account</Button>
-                    <br />
+        <Typography variant="h2" align="center" style={{ color: '#0069D9', margin: '5%'}}>Sign-Up</Typography>
+        <Grid container style={{margin: 'auto', width: '50%'}}>
+            <Grid container spacing={2}>
+                <Grid item xs={6}>
+                    <TextField
+                        label="First Name"
+                        variant="outlined"
+                        fullWidth
+                        required
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="Enter your first name"
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <TextField
+                        label="Last Name"
+                        variant="outlined"
+                        fullWidth
+                        required
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="Enter your last name"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        label="Email"
+                        variant="outlined"
+                        fullWidth
+                        required
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        label="Password"
+                        variant="outlined"
+                        fullWidth
+                        required
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter your password"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <Button variant="contained" color="primary" onClick={handleSignUp}>
+                        Create account
+                    </Button>
+                </Grid>
+                <Grid item xs={12}>
                     <span><Link to={'/signin'}>Already have an account?</Link></span>
-                </Form> 
-            </Container>
+                </Grid>
+            </Grid> 
+            </Grid>
     </div> );
 }
 

@@ -1,9 +1,8 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import BNavbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Form } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { API } from '../environment';
 
 async function logout() {
@@ -15,34 +14,48 @@ async function logout() {
         throw error;
     }
 }
-    
+
 function Navbar() {
-    return ( 
-        <>
-        <BNavbar expand="lg" className="bg-body-tertiary">
-            <Container>
-                <BNavbar.Toggle aria-controls="basic-navbar-nav" />
-                <BNavbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                    <Nav.Link href="#home">Home</Nav.Link>
-                    <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">
-                            Another action
-                        </NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">
-                            Separated link
-                        </NavDropdown.Item>
-                    </NavDropdown>
-                    <Nav.Link onClick={logout}>Log out</Nav.Link>
-                </Nav>
-                </BNavbar.Collapse>
-            </Container>
-        </BNavbar>
-        </>
-     );
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event: any) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <AppBar position="static">
+            <Toolbar>
+                <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    onClick={handleClick}
+                    sx={{ mr: 2 }}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    <MenuItem onClick={handleClose}><Link to="/">Home</Link></MenuItem>
+                    <MenuItem onClick={handleClose}>Dropdown</MenuItem>
+                    <MenuItem onClick={handleClose}><Link to="/logout" onClick={logout}>Log out</Link></MenuItem>
+                </Menu>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Navbar
+                </Typography>
+                <Button color="inherit" onClick={logout}>Log out</Button>
+            </Toolbar>
+        </AppBar>
+    );
 }
 
 export default Navbar;

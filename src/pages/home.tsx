@@ -1,17 +1,17 @@
-import { Container, Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/navbar';
 import RoomList from '../components/roomsList';
+import { Grid } from '@mui/material';
+import Navbar from '../components/navbar';
 
 function Home() {
     return <>
-        <Navbar />
-        <Container >
-            <Row className='justify-content-md-center' style={{marginTop: '50px'}}>Chat App</Row>
-            <Row className='justify-content-md-center'>
-            < RoomList />
-            </Row>
-        </Container>
+        <Grid container spacing={2}>
+            <Navbar />
+            <Grid className='justify-content-md-center' style={{marginTop: '50px'}}>Chat App</Grid>
+            <Grid className='justify-content-md-center'>
+                < RoomList />
+            </Grid>
+        </Grid>
 
 
     
