@@ -30,6 +30,7 @@ const router = createBrowserRouter([
 
 
 function App() {
+  // localStorage.removeItem('user');
   return <>
     <RouterProvider router={router} />
   </>

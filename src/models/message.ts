@@ -3,7 +3,7 @@ import { Room } from "./room";
 import { User } from "./user";
 
 export interface Message {
-    id: number;
+    id?: number;
     sender: User;
     receiver: User;
     content: string;

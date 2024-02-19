@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom";
 import { Room, RoomFromDB } from "../models/room";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { API } from "../environment";
+import { API, SOCKET_SERVER } from "../environment";
 import { decodeToken } from "react-jwt";
 import { User, UserFromDB } from "../models/user";
 import MessagesList from "./messagesList";
 import { Button } from "react-bootstrap";
+import { Socket, io } from "socket.io-client";
+import { Message } from "../models/message";
 
 function ChatRoom() {
     const token = localStorage.getItem('user') as string;
@@ -17,11 +19,22 @@ function ChatRoom() {
     const [me, setMe] = useState<User>();
     const [other, setOther] = useState<User>();
     const [messageBody, setMessageBody] = useState('');
+    const [messages, setMessages] = useState<Message[]>([]);
     
+    const socketRef = useRef<Socket | null>(null);
+
 
     useEffect(() => {
-        getRoomInfo();
-    }, []);
+        try {
+            getRoomInfo();
+            socketRef.current = io(SOCKET_SERVER);
+            socketRef.current.on('connect', () => {
+                console.log('Connected!');
+            });
+        } catch (error) {
+            throw error;
+        }
+    }, [messages]);
 
     async function getRoomInfo() {
         try {
@@ -66,9 +79,15 @@ function ChatRoom() {
     async function onMessageSubmit(e: any) {
         try {
             e.preventDefault();
-            
-              
+            const newMessage: Message = {
+                sender: me as User,
+                content: messageBody,
+                receiver: other as User,
+                room: room as Room,
+                sentTime: new Date()
 
+            }
+            socketRef.current?.emit('message to server', newMessage);
         } catch (error) {
             throw error;
         }
@@ -80,39 +99,16 @@ function ChatRoom() {
 
     return <>
         <h1>{other?.firstName + ' ' + other?.lastName}</h1>
-        {room && <MessagesList room={room}/>}
+        {room && <MessagesList room={room} setMessages={setMessages} />}
         <form onSubmit={onMessageSubmit}>
-            <textarea 
+            <textarea
                 placeholder="Type here..."
                 onChange={(e) => {onTextChange(e)}}
-            >
+            ></textarea>
 
-            </textarea>
             <Button type='submit' disabled = {messageBody === ''}>Send</Button>
         </form>
     </>
-
-    // return (
-		// <div className="card">
-		// 	<form onSubmit={onMessageSubmit}>
-		// 		<h1>{otherUser.username}</h1>
-		// 		<div>
-		// 			<TextField
-		// 				name="message"
-		// 				onChange={(e: any) => onTextChange(e)}
-		// 				value={messageBody}
-		// 				variant="outlined"
-		// 				label="Message"
-		// 			/>
-		// 		</div>
-		// 		<button disabled = {messageBody === ''}>Send Message</button>
-		// 	</form>
-		// 	<div className="render-chat">
-		// 		<h1>Chat Log</h1>
-		// 		{renderChat()}
-		// 	</div>
-		// </div>
-	// );
 }
 
 export default ChatRoom;
