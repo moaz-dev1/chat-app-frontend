@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react';
 import { Room, RoomFromDB } from '../models/room';
 import { User, UserFromDB } from '../models/user';
 import { Link } from 'react-router-dom';
+import { List, ListItem, ListItemAvatar, Avatar, ListItemText, Typography, Divider, IconButton, Button } from '@mui/material';
+import React from 'react';
+import { Person } from '@mui/icons-material';
 
 function RoomsList() {
     const [rooms, setRooms] = useState<Room[]>([]);
@@ -60,11 +63,37 @@ function RoomsList() {
     
     
 
-    return <>
-        {rooms && rooms.map((room: Room) => (
-            <Link key={room.id} to={'/chatroom/' + room.id}>{room.user2?.firstName + ' ' + room.user2?.lastName}</Link>
-        ))}
-    </>
+    return (
+        <>
+          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            {rooms.map((room, index) => (
+              <Link key={room.id} to={'/chatroom/' + room.id} style={{textDecoration: 'none'}}>
+                    <ListItem style={{
+                        backgroundColor: '#1976D2', 
+                        color: 'white',
+                        borderRadius: '30px'
+                        
+                        }}>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <Person />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={room.user2?.firstName + ' ' + room.user2?.lastName}
+                            secondary={
+                            <div style={{color: 'lightgrey'}}>
+                                Last Message
+                            </div>
+                            }
+                        />
+                </ListItem>
+              </Link>
+            ))}
+          </List>
+        </>
+      );
+      
 }
 
 export default RoomsList;

@@ -4,7 +4,8 @@ import { Room } from "../models/room";
 import { API } from "../environment";
 import axios from "axios";
 import { decodeToken } from "react-jwt";
-import { User, UserFromDB } from "../models/user";
+import { User } from "../models/user";
+import { List, ListItem, ListItemText, Paper } from "@mui/material";
 
 interface MessagesListProps {
     room: Room,
@@ -42,19 +43,35 @@ function MessagesList({ room, setMessages }: MessagesListProps) {
 
     useEffect(() => {
         getMessages(room);
-        console.log("Messges Updated");
+        console.log("Messages Updated");
     }, []);
 
-    return <>
-        <strong>Chat Messages:</strong>
-        <br />
-        {messages && messages.map((message: Message) => (
-            <div key={message.id}>
-                <strong>{message.sender.firstName}: </strong>
-                {message.content}
-            </div>
-        ))}
-    </>
+    return (
+        <Paper elevation={3} style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
+            <List>
+                {messages.map(message => (
+                    <ListItem 
+                        key={message.id} 
+                        style={{ 
+                            justifyContent: message.sender.id === myId ? 'flex-end' : 'flex-start' 
+                        }}
+                    >
+                        <div
+                            style={{
+                                backgroundColor: message.sender.id === myId ? '#1976D2' : 'lightgrey',
+                                color: message.sender.id === myId ? 'white' : 'black',
+                                padding: '10px',
+                                borderRadius: '10px',
+                                textAlign: message.sender.id === myId ? 'right' : 'left'
+                            }}
+                        >
+                            {message.content}
+                        </div>
+                    </ListItem>
+                ))}
+            </List>
+        </Paper>
+    );
 }
 
 export default MessagesList;

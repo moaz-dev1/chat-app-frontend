@@ -5,10 +5,10 @@ import axios from "axios";
 import { API, SOCKET_SERVER } from "../environment";
 import { decodeToken } from "react-jwt";
 import { User, UserFromDB } from "../models/user";
-import MessagesList from "./messagesList";
+import MessagesList from "../components/messagesList";
 import { Socket, io } from "socket.io-client";
 import { Message } from "../models/message";
-import { Button } from "@mui/material";
+import { Avatar, Button, Container, List, ListItem, ListItemAvatar, ListItemText, Paper, TextField } from "@mui/material";
 
 function ChatRoom() {
     const token = localStorage.getItem('user') as string;
@@ -98,7 +98,7 @@ function ChatRoom() {
     }
 
     return <>
-        <h1>{other?.firstName + ' ' + other?.lastName}</h1>
+        {/* <h1>{other?.firstName + ' ' + other?.lastName}</h1>
         {room && <MessagesList room={room} setMessages={setMessages} />}
         <form onSubmit={onMessageSubmit}>
             <textarea
@@ -107,7 +107,38 @@ function ChatRoom() {
             ></textarea>
 
             <Button type='submit' disabled = {messageBody === ''}>Send</Button>
-        </form>
+        </form> */}
+
+        <Container style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+            <Paper elevation={3}>
+            <List>
+            <ListItem>
+                <ListItemAvatar>
+                <Avatar />
+                </ListItemAvatar>
+                <ListItemText primary={room?.user2?.firstName + ' ' + room?.user2?.lastName} />
+            </ListItem>
+            </List>
+        </Paper>
+
+        {room && <MessagesList room={room} setMessages={setMessages} />}
+
+        <Paper elevation={3} style={{ marginTop: 'auto'}}>
+        <TextField
+          id="outlined-basic"
+          label="Type your message"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          multiline
+          rows={2}
+        />
+        <Button variant="contained" color="primary" fullWidth>
+          Send
+        </Button>
+      </Paper>
+        
+        </Container>
     </>
 }
 

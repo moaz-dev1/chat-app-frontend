@@ -47,7 +47,6 @@ function Navbar() {
                 >
                     <MenuItem onClick={handleClose}><Link to="/">Home</Link></MenuItem>
                     <MenuItem onClick={handleClose}>Dropdown</MenuItem>
-                    <MenuItem onClick={handleClose}><Link to="/logout" onClick={logout}>Log out</Link></MenuItem>
                 </Menu>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Navbar
