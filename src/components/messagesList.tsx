@@ -5,18 +5,17 @@ import { API } from "../environment";
 import axios from "axios";
 import { decodeToken } from "react-jwt";
 import { User } from "../models/user";
-import { List, ListItem, ListItemText, Paper } from "@mui/material";
+import { List, ListItem, Paper } from "@mui/material";
 
 interface MessagesListProps {
     room: Room,
-    setMessages: any
 }
 
-function MessagesList({ room, setMessages }: MessagesListProps) {
+function MessagesList({ room }: MessagesListProps) {
     const token = localStorage.getItem('user') as string;
     const myToken = decodeToken(token) as {id: number};
     const myId = myToken.id;
-    const [messages, setMessages1] = useState<Message[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     
 
     async function getMessages(room: Room) {
@@ -35,7 +34,6 @@ function MessagesList({ room, setMessages }: MessagesListProps) {
             });
             
             setMessages(messages);
-            setMessages1(messages);
         } catch (error) {
             throw error;
         }

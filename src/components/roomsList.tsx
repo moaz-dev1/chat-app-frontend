@@ -6,7 +6,6 @@ import { Room, RoomFromDB } from '../models/room';
 import { User, UserFromDB } from '../models/user';
 import { Link } from 'react-router-dom';
 import { List, ListItem, ListItemAvatar, Avatar, ListItemText, Typography, Divider, IconButton, Button } from '@mui/material';
-import React from 'react';
 import { Person } from '@mui/icons-material';
 
 function RoomsList() {

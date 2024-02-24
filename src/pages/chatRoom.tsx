@@ -16,25 +16,43 @@ function ChatRoom() {
     const myId = myToken.id;
     const roomId = useParams().id;
     const [room, setRoom] = useState<Room>();
-    const [me, setMe] = useState<User>();
+    const [me, setMe]= useState<User>();
     const [other, setOther] = useState<User>();
     const [messageBody, setMessageBody] = useState('');
-    const [messages, setMessages] = useState<Message[]>([]);
-    
     const socketRef = useRef<Socket | null>(null);
-
 
     useEffect(() => {
         try {
-            getRoomInfo();
-            socketRef.current = io(SOCKET_SERVER);
-            socketRef.current.on('connect', () => {
-                console.log('Connected!');
-            });
+            (async () => {
+                const room = await getRoomInfo();
+                await initializeSocket(room);
+            })();
         } catch (error) {
             throw error;
         }
-    }, [messages]);
+    }, []);
+
+    async function initializeSocket(room: Room) {
+        const me = room.user1;
+        const other = room.user2;
+
+        socketRef.current = io(SOCKET_SERVER);
+        socketRef.current.on('connect', () => {
+            console.log('Connected!');
+        });
+        socketRef.current.emit('login', me);
+        
+        socketRef.current.emit('create room', room);
+        socketRef.current.on('invite', (room) => {
+            if(socketRef.current) {
+                socketRef.current.emit('join', room);
+            }
+        });
+
+        socketRef.current.on('message to client', (message: Message) => {
+            // console.log(message.content);
+        });
+    }
 
     async function getRoomInfo() {
         try {
@@ -59,10 +77,11 @@ function ChatRoom() {
                     lastName: otherFromDB.last_name,
                     email: otherFromDB.email,
                     password: otherFromDB.password,
-                    createdTime: otherFromDB.created_time
+                    createdTime: otherFromDB.created_time,
                 }
                 setOther(other);
             
+                /* User1 is me and user2 is the other user */
                 const room: Room = {
                     id: roomFromDB.id,
                     user1: me,
@@ -71,12 +90,13 @@ function ChatRoom() {
                 };
             
                 setRoom(room);
+                return room;
         } catch (error) {
             throw error;
         }
     }
 
-    async function onMessageSubmit(e: any) {
+    async function handleMessageSubmit(e: any) {
         try {
             e.preventDefault();
             const newMessage: Message = {
@@ -85,30 +105,18 @@ function ChatRoom() {
                 receiver: other as User,
                 room: room as Room,
                 sentTime: new Date()
-
             }
+            // const result = await axios.post(API + '/messages', {newMessage}, {headers: {'token': token}});
+
             socketRef.current?.emit('message to server', newMessage);
+
+            setMessageBody('');
         } catch (error) {
             throw error;
         }
     }
 
-    function onTextChange(e: any) {
-        setMessageBody(e.target.value);
-    }
-
     return <>
-        {/* <h1>{other?.firstName + ' ' + other?.lastName}</h1>
-        {room && <MessagesList room={room} setMessages={setMessages} />}
-        <form onSubmit={onMessageSubmit}>
-            <textarea
-                placeholder="Type here..."
-                onChange={(e) => {onTextChange(e)}}
-            ></textarea>
-
-            <Button type='submit' disabled = {messageBody === ''}>Send</Button>
-        </form> */}
-
         <Container style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
             <Paper elevation={3}>
             <List>
@@ -121,7 +129,7 @@ function ChatRoom() {
             </List>
         </Paper>
 
-        {room && <MessagesList room={room} setMessages={setMessages} />}
+        {room && <MessagesList room={room} />}
 
         <Paper elevation={3} style={{ marginTop: 'auto'}}>
         <TextField
@@ -132,8 +140,10 @@ function ChatRoom() {
           margin="normal"
           multiline
           rows={2}
+          value={messageBody}
+          onChange={(e) => {setMessageBody(e.target.value);}}
         />
-        <Button variant="contained" color="primary" fullWidth>
+        <Button variant="contained" color="primary" fullWidth onClick={handleMessageSubmit}>
           Send
         </Button>
       </Paper>

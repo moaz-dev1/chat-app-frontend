@@ -5,7 +5,6 @@ import SingUp from './pages/signUp';
 import Home from './pages/home';
 import ErrorPage from './pages/errorPage';
 import ChatRoom from './pages/chatRoom';
-import ChatTest from './pages/chat-test';
 
 const router = createBrowserRouter([
   {
@@ -25,12 +24,6 @@ const router = createBrowserRouter([
     path: '/chatroom/:id',
     element: localStorage.getItem('user') ? <ChatRoom /> : <SignIn />
   },
-
-  {
-    path: '/chat-test',
-    element: <ChatTest />
-  }
-
 ]);
 
 
