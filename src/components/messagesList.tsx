@@ -9,9 +9,10 @@ import { List, ListItem, Paper } from "@mui/material";
 
 interface MessagesListProps {
     room: Room,
+    newMessages: number
 }
 
-function MessagesList({ room }: MessagesListProps) {
+function MessagesList({ room, newMessages }: MessagesListProps) {
     const token = localStorage.getItem('user') as string;
     const myToken = decodeToken(token) as {id: number};
     const myId = myToken.id;
@@ -41,8 +42,8 @@ function MessagesList({ room }: MessagesListProps) {
 
     useEffect(() => {
         getMessages(room);
-        console.log("Messages Updated");
-    }, []);
+        console.log("MessagesList rendered");
+    }, [newMessages]);
 
     return (
         <Paper elevation={3} style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>

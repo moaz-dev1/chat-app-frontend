@@ -19,10 +19,12 @@ function ChatRoom() {
     const [me, setMe]= useState<User>();
     const [other, setOther] = useState<User>();
     const [messageBody, setMessageBody] = useState('');
+    const [newMessages, updateNewMessages] = useState(0);
     const socketRef = useRef<Socket | null>(null);
 
     useEffect(() => {
         try {
+            console.log('ChatRoom rendered');
             (async () => {
                 const room = await getRoomInfo();
                 await initializeSocket(room);
@@ -30,17 +32,15 @@ function ChatRoom() {
         } catch (error) {
             throw error;
         }
-    }, []);
+    }, [newMessages]);
 
     async function initializeSocket(room: Room) {
-        const me = room.user1;
-        const other = room.user2;
-
         socketRef.current = io(SOCKET_SERVER);
         socketRef.current.on('connect', () => {
             console.log('Connected!');
         });
-        socketRef.current.emit('login', me);
+
+        socketRef.current.emit('login', room.user1);
         
         socketRef.current.emit('create room', room);
         socketRef.current.on('invite', (room) => {
@@ -49,8 +49,8 @@ function ChatRoom() {
             }
         });
 
-        socketRef.current.on('message to client', (message: Message) => {
-            // console.log(message.content);
+        socketRef.current.on('message to room', () => {
+            updateNewMessages(newMessages + 1);
         });
     }
 
@@ -106,10 +106,10 @@ function ChatRoom() {
                 room: room as Room,
                 sentTime: new Date()
             }
-            // const result = await axios.post(API + '/messages', {newMessage}, {headers: {'token': token}});
+
+            await axios.post(API + '/messages', newMessage, {headers: {'token': token}});
 
             socketRef.current?.emit('message to server', newMessage);
-
             setMessageBody('');
         } catch (error) {
             throw error;
@@ -129,7 +129,7 @@ function ChatRoom() {
             </List>
         </Paper>
 
-        {room && <MessagesList room={room} />}
+        {room && <MessagesList room={room} newMessages={newMessages} />}
 
         <Paper elevation={3} style={{ marginTop: 'auto'}}>
         <TextField
