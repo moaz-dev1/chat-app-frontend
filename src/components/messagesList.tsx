@@ -42,7 +42,6 @@ function MessagesList({ room, newMessages }: MessagesListProps) {
 
     useEffect(() => {
         getMessages(room);
-        console.log("MessagesList rendered");
     }, [newMessages]);
 
     return (

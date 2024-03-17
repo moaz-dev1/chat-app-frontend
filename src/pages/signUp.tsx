@@ -30,6 +30,7 @@ function SingUp() {
             
             await axios.post(API + '/users', newUser);            
             navigate('/signin');
+            window.location.reload();
         } catch (error) {
             throw error;
         }

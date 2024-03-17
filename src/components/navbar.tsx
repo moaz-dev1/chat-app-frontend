@@ -4,18 +4,11 @@ import axios from 'axios';
 import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { API } from '../environment';
+import { useNavigate } from 'react-router-dom';
 
-async function logout() {
-    try {
-        await axios.get(API + '/auth/logout');
-        localStorage.removeItem('user');
-        window.location.reload();   
-    } catch (error) {
-        throw error;
-    }
-}
 
 function Navbar() {
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event: any) => {
@@ -25,6 +18,17 @@ function Navbar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    async function logout() {
+        try {
+            await axios.get(API + '/auth/logout');
+            localStorage.removeItem('user');
+            navigate('/signin');
+            window.location.reload();
+        } catch (error) {
+            throw error;
+        }
+    }
 
     return (
         <AppBar position="static">
@@ -49,7 +53,7 @@ function Navbar() {
                     <MenuItem onClick={handleClose}>Dropdown</MenuItem>
                 </Menu>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Navbar
+                    <Link to={'/'} style={{textDecoration: 'none', color: 'white'}}>Chat App</Link>
                 </Typography>
                 <Button color="inherit" onClick={logout}>Log out</Button>
             </Toolbar>

@@ -24,7 +24,6 @@ function ChatRoom() {
 
     useEffect(() => {
         try {
-            console.log('ChatRoom rendered');
             (async () => {
                 const room = await getRoomInfo();
                 await initializeSocket(room);
@@ -36,6 +35,7 @@ function ChatRoom() {
 
     async function initializeSocket(room: Room) {
         socketRef.current = io(SOCKET_SERVER);
+        
         socketRef.current.on('connect', () => {
             console.log('Connected!');
         });
@@ -43,6 +43,7 @@ function ChatRoom() {
         socketRef.current.emit('login', room.user1);
         
         socketRef.current.emit('create room', room);
+
         socketRef.current.on('invite', (room) => {
             if(socketRef.current) {
                 socketRef.current.emit('join', room);

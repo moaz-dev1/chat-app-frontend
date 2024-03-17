@@ -7,12 +7,17 @@ import { User, UserFromDB } from '../models/user';
 import { Link } from 'react-router-dom';
 import { List, ListItem, ListItemAvatar, Avatar, ListItemText, Typography, Divider, IconButton, Button } from '@mui/material';
 import { Person } from '@mui/icons-material';
+import { Message } from '../models/message';
+
+
+
 
 function RoomsList() {
     const [rooms, setRooms] = useState<Room[]>([]);
     const token = localStorage.getItem('user') as string;
     const myToken = decodeToken(token) as {id: number};
     const myId = myToken.id;
+    const [lastMessage, setLastMessage] = useState<Message>();
 
 
     async function getRooms() {
@@ -46,6 +51,9 @@ function RoomsList() {
                     user2: other, 
                     createdTime: roomFromDB.created_time,
                 };
+
+                const lastMessage = (await axios.get(API + '/messages/' + roomFromDB.last_message_id, {headers: {'token': token}})).data;
+                setLastMessage(lastMessage);
     
                 return room;
             }));
@@ -60,7 +68,11 @@ function RoomsList() {
         getRooms();
     }, []);
     
-    
+    const styles = {
+        secondaryText: {
+          color: 'lightgrey',
+        },
+      };
 
     return (
         <>
@@ -70,8 +82,8 @@ function RoomsList() {
                     <ListItem style={{
                         backgroundColor: '#1976D2', 
                         color: 'white',
-                        borderRadius: '30px'
-                        
+                        borderRadius: '30px',
+                        margin: '3%'
                         }}>
                         <ListItemAvatar>
                             <Avatar>
@@ -80,11 +92,7 @@ function RoomsList() {
                         </ListItemAvatar>
                         <ListItemText
                             primary={room.user2?.firstName + ' ' + room.user2?.lastName}
-                            secondary={
-                            <div style={{color: 'lightgrey'}}>
-                                Last Message
-                            </div>
-                            }
+                            secondary={<span style={{color: 'lightgrey'}}>{lastMessage?.content}</span>}
                         />
                 </ListItem>
               </Link>

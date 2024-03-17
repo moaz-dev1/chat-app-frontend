@@ -27,6 +27,7 @@ function SignIn() {
             } 
             
             localStorage.setItem('user', result.data.token);
+            navigate('/');
             window.location.reload();
         } catch (error) {
             throw error;
