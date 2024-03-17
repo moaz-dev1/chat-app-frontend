@@ -26,12 +26,17 @@ The frontend for the web chat application is developed using React.js and Materi
 - Real-time messaging is facilitated through Socket.IO connection with the backend server.
 
 ## Screenshots
+## 1
 ![Signup](assets/signup.PNG)
 
+## 2
 ![Signin](assets/signin.PNG)
 
+## 3
 ![Home](assets/home.PNG)
 
+## 4
 ![Chat 1](assets/chat_1.PNG)
 
+## 5
 ![Chat 2](assets/chat_2.PNG)
