@@ -27,7 +27,11 @@ The frontend for the web chat application is developed using React.js and Materi
 
 ## Screenshots
 ![Signup](assets/signup.PNG)
+
 ![Signin](assets/signin.PNG)
+
 ![Home](assets/home.PNG)
+
 ![Chat 1](assets/chat_1.PNG)
+
 ![Chat 2](assets/chat_2.PNG)
